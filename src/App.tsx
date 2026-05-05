@@ -202,9 +202,10 @@ const isDark = theme === "dark";
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex-shrink-0 flex items-center cursor-pointer group gap-3" onClick={() => scrollToSection('home')}>
-              <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-primary-600 to-secondary-600 text-white font-serif font-bold text-xl shadow-lg group-hover:shadow-primary-500/30 group-hover:scale-105 transition-all duration-300">
+            <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-primary-600 to-secondary-600 text-white font-serif font-bold text-xl shadow-lg group-hover:shadow-primary-500/30 group-hover:scale-105 transition-all duration-300">
                 AJ
                 <div className="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </div>
               </div>
              
             </div>
