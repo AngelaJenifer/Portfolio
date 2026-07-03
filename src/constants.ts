@@ -22,7 +22,7 @@ export const EXPERIENCES: Experience[] = [
     role: "Frontend Developer",
     company: "DSAT Global Pvt Ltd",
     location: "Kilpauk",
-    period: "April 2023 – Present",
+    period: "December 2023 – Present",
     type: 'tech',
     description: [
       "Developing and maintaining user interfaces for DMS (Dock Management System) with modules like Tenant Management, Audit Log, Platform-wide Usage, Appointments by Day, and Recent Tenant Activity dashboards.",
@@ -63,7 +63,7 @@ export const PROJECTS: Project[] = [
     title: "Dock Management System",
     techStack: ["React", "MUI", "Python"],
     description: "A comprehensive dashboard for managing tenants, audit logs, and platform usage analytics. Features complex data visualization and real-time activity tracking.",
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800"
+    image: "/DMS.png"
   },
   {
     id: 2,
