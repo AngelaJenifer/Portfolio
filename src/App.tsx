@@ -347,16 +347,26 @@ const isDark = theme === "dark";
               className="flex-1 text-center lg:text-left space-y-7 order-2 lg:order-1"
             >
               {/* Availability badge */}
-              <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700/50 text-green-700 dark:text-green-400 text-xs font-semibold tracking-wide shadow-sm">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                Available for Opportunities
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="inline-flex"
+              >
+                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 dark:bg-green-400/10 border border-green-500/40 dark:border-green-400/40 text-green-700 dark:text-green-300 text-xs font-bold tracking-wide shadow-md shadow-green-500/10">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+                  </span>
+                  Open to Work
+                </span>
               </motion.div>
 
               {/* Name */}
               <motion.h1 variants={fadeInUp} className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-slate-900 dark:text-white leading-tight tracking-tight">
                 Hi, I'm{' '}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-600 via-secondary-500 to-primary-500 dark:from-primary-400 dark:via-secondary-400 dark:to-primary-400 animate-gradient-x bg-[length:200%_auto]">
-                  Angela Jenifer
+                  {PERSONAL_DETAILS.name}
                 </span>
               </motion.h1>
 

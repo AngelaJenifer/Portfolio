@@ -12,8 +12,8 @@ export const PERSONAL_DETAILS = {
   // TO USE YOUR OWN PHOTO:
   // Option 1: Place your photo (e.g. 'me.jpg') in the 'public' folder and set this to: "/me.jpg"
   // Option 2: Upload to a site like Imgur/LinkedIn and paste the "Direct Link" (starts with https://) here.
-  profileImageLight: "/whitebgphoto.png",
-  profileImageDark: "/photo.png",
+  profileImageLight: "/myphoto.jpeg",
+  profileImageDark: "/myphoto.jpeg",
   about: "To obtain a challenging position as a Frontend Developer, where I can leverage my technical expertise in React.js and modern UI frameworks to deliver scalable, user-friendly applications, contribute to innovative products, and grow professionally in a dynamic environment.",
   tagline: "Building scalable, user-centric web experiences with React & Modern UI.",
   roleVariants: ["Frontend Developer", "React Specialist", "SaaS Builder"],
