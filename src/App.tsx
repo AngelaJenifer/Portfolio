@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { motion, Variants } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { PERSONAL_DETAILS, EXPERIENCES, PROJECTS, SKILLS, EDUCATION } from './constants';
+import { Project } from './types';
 import { 
   Mail, 
   Phone, 
@@ -19,7 +20,11 @@ import {
   Moon,
   Loader2,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Star,
+  Users,
+  Clock,
+  Layers
 } from 'lucide-react';
 
 // Animation Variants
@@ -72,6 +77,7 @@ const slideInRight: Variants = {
 
 const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeSection, setActiveSection] = useState('home');
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -611,6 +617,7 @@ const isDark = theme === "dark";
                   <motion.button 
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
+                    onClick={() => project.details && setSelectedProject(project)}
                     className="w-full py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700/50 text-slate-700 dark:text-slate-300 font-medium rounded-lg hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/50 dark:hover:to-secondary-900/50 hover:border-primary-500/50 hover:text-primary-700 dark:hover:text-white transition-all text-sm group-hover:shadow-lg"
                   >
                     View Details
@@ -810,7 +817,142 @@ const isDark = theme === "dark";
           </p>
         </div>
       </footer>
+
+      {/* ── Project Detail Modal ── */}
+      <AnimatePresence>
+        {selectedProject && selectedProject.details && (
+          <motion.div
+            key="project-modal-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+            onClick={() => setSelectedProject(null)}
+            onKeyDown={(e) => e.key === 'Escape' && setSelectedProject(null)}
+          >
+            <motion.div
+              key="project-modal-panel"
+              initial={{ opacity: 0, scale: 0.92, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 30 }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
+              className="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Image Header */}
+              {selectedProject.image && (
+                <div className="h-52 w-full overflow-hidden rounded-t-2xl relative">
+                  <img
+                    src={selectedProject.image}
+                    alt={selectedProject.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
+                  <h2 className="absolute bottom-4 left-6 text-white font-bold text-2xl drop-shadow-lg">
+                    {selectedProject.title}
+                  </h2>
+                </div>
+              )}
+
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="absolute top-4 right-4 z-10 p-2 bg-black/40 hover:bg-black/60 text-white rounded-full transition-colors"
+                aria-label="Close"
+              >
+                <X size={18} />
+              </button>
+
+              <div className="p-6 space-y-6">
+                {/* Tech Stack */}
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.techStack.map(tech => (
+                    <span
+                      key={tech}
+                      className="px-3 py-1 bg-primary-50 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-700/50 text-primary-700 dark:text-primary-300 text-xs font-semibold rounded-full"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Meta: Role / Team / Duration */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                    <User size={16} className="text-primary-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wide">Role</p>
+                      <p className="text-sm text-slate-800 dark:text-slate-200 font-medium leading-snug mt-0.5">{selectedProject.details.role}</p>
+                    </div>
+                  </div>
+                  {selectedProject.details.teamSize && (
+                    <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                      <Users size={16} className="text-secondary-500 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wide">Team</p>
+                        <p className="text-sm text-slate-800 dark:text-slate-200 font-medium mt-0.5">{selectedProject.details.teamSize}</p>
+                      </div>
+                    </div>
+                  )}
+                  {selectedProject.details.duration && (
+                    <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                      <Clock size={16} className="text-green-500 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wide">Duration</p>
+                        <p className="text-sm text-slate-800 dark:text-slate-200 font-medium mt-0.5">{selectedProject.details.duration}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Overview */}
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                    <Layers size={16} className="text-primary-500" /> Overview
+                  </h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    {selectedProject.details.overview}
+                  </p>
+                </div>
+
+                {/* Features */}
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+                    <Code2 size={16} className="text-secondary-500" /> Key Features
+                  </h3>
+                  <ul className="space-y-2">
+                    {selectedProject.details.features.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-2.5 text-sm text-slate-700 dark:text-slate-300">
+                        <ChevronRight size={15} className="text-primary-500 mt-0.5 flex-shrink-0" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Highlights */}
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+                    <Star size={16} className="text-yellow-500" /> Technical Highlights
+                  </h3>
+                  <ul className="space-y-2">
+                    {selectedProject.details.highlights.map((h, i) => (
+                      <li key={i} className="flex items-start gap-2.5 text-sm text-slate-700 dark:text-slate-300">
+                        <CheckCircle size={15} className="text-green-500 mt-0.5 flex-shrink-0" />
+                        <span>{h}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </div>
+
   );
 };
 

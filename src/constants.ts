@@ -61,25 +61,101 @@ export const PROJECTS: Project[] = [
   {
     id: 1,
     title: "Dock Management System",
-    techStack: ["React", "MUI", "Python"],
-    description: "A comprehensive dashboard for managing tenants, audit logs, and platform usage analytics. Features complex data visualization and real-time activity tracking.",
-    image: "/DMS.png"
+    techStack: ["React", "TypeScript", "MUI", "Python", "MongoDB", "PWA"],
+    description: "A comprehensive enterprise dashboard for managing dock operations — tenants, appointments, audit logs, and platform-wide usage analytics with real-time activity tracking.",
+    image: "/DMS.png",
+    details: {
+      overview: "The Dock Management System (DMS) is a full-featured enterprise SaaS platform built for warehouse and logistics operators. It provides a unified dashboard to manage dock slots, tenant onboarding, appointment scheduling, gate operations, and compliance reporting — all in real time.",
+      role: "Frontend Developer — sole frontend owner responsible for all UI modules from architecture to deployment.",
+      teamSize: "5 (2 Frontend, 2 Backend, 1 DevOps)",
+      duration: "Dec 2023 – Present",
+      features: [
+        "Tenant Management — onboard, configure, and monitor tenants with granular role-based permissions",
+        "Appointment Scheduling — calendar-based dock slot booking with conflict detection",
+        "Gate Management — real-time truck tracking from yard entry to dock completion",
+        "Dock Operations — visual dock layout with live truck status (Waiting, Docking, Loading, Unloading, On Hold)",
+        "Audit Log — tamper-proof event log for all platform actions with filters and export",
+        "Platform Usage Dashboard — KPI tiles, bar charts, line charts for usage trends across tenants",
+        "Recent Tenant Activity Feed — real-time scrollable activity stream",
+        "Reports & Analytics — exportable reports for appointments, operations, and compliance",
+        "Settings & Permissions — fine-grained module-level access control (View, Add, Edit, Delete, Export)",
+        "Progressive Web App (PWA) — offline support and push notifications",
+      ],
+      highlights: [
+        "Implemented PWA with service workers for offline-first experience",
+        "Built reusable component library across 11 feature modules",
+        "Integrated REST APIs with Python/FastAPI backend for real-time data sync",
+        "Designed role-based access control system with per-module granular permissions",
+        "Delivered production-ready CI/CD pipeline with Jenkins and Docker",
+      ],
+    }
   },
   {
     id: 2,
-    title: "Fleet Management System",
-    techStack: ["React", "MUI"],
-    description: "An optimization tool for fleet operations. Integrated interactive charts to visualize route efficiency and vehicle status.",
-    image: "https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=800"
+    title: "StarsIn-Football",
+    techStack: ["React", "TypeScript", "Redux", "Vite", "Tailwind CSS", "i18n"],
+    description: "A football talent scouting platform connecting athletes and aggregators. Features athlete KYC management, drill performance tracking, leaderboards, and a validator review workflow.",
+    image: "https://images.unsplash.com/photo-1553778263-73a83bab9b0c?auto=format&fit=crop&q=80&w=800",
+    details: {
+      overview: "StarsIn-Football is a sports-tech SaaS platform designed to discover and verify football talent. The platform has two portals — an Aggregator portal (for scouts and administrators) and an Athlete portal (for players). Scouts review athlete profiles, validate performance drills, manage KYC approvals, and maintain leaderboards for talent rankings.",
+      role: "Frontend Developer — built and maintained the Aggregator portal, Athlete management, drill validation workflows, and leaderboard system.",
+      teamSize: "4 (2 Frontend, 2 Backend)",
+      duration: "Dec 2023 – Present",
+      features: [
+        "Aggregator Dashboard — summary view of athlete counts, pending KYC, drill submissions, and recent activity",
+        "Athlete Management — full CRUD with profile photos, personal details, position, and status",
+        "KYC Management Queue — review and approve/reject athlete identity documents with inline viewer",
+        "Drill Management — browse, filter, and validate athlete performance drill submissions",
+        "Validator Queue — separate role-based portal for validators to review and score drills",
+        "Leaderboard — ranked athlete table with drill scores, positions, and performance metrics",
+        "Role-Based Access — Admin vs Validator roles with route-level protection",
+        "Multilingual Support — i18n locale management with language switcher",
+        "Dark / Light Theme — theme toggled via Redux with persistent preference",
+        "Athlete Portal — dedicated portal for athletes to view their profile, submit drills, and track scores",
+      ],
+      highlights: [
+        "Architected role-based routing with lazy-loaded pages for optimal performance",
+        "Built KYC document review workflow with multi-state approval pipeline",
+        "Implemented Redux state management for auth, theme, and role-switching",
+        "Integrated multi-language support with automated locale comparison tooling",
+        "Deployed via GitLab CI/CD with Docker containerization",
+      ],
+    }
   },
   {
     id: 3,
     title: "Route Optimization System",
-    techStack: ["React", "Node.js"],
-    description: "A logic-driven application to calculate and display optimal routes, reducing operational costs and improving delivery times.",
-    image: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=800"
+    techStack: ["React", "Python", "HERE Maps", "Leaflet", "Chart.js", "Bootstrap", "Styled Components"],
+    description: "A logistics optimization platform that calculates optimal delivery routes, manages vehicle dispatch plans, handles speed and route restrictions, and visualizes routes on interactive maps.",
+    image: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=800",
+    details: {
+      overview: "The Route Optimization System is a full-stack logistics platform that solves the Vehicle Routing Problem (VRP) for last-mile delivery operations. It takes customer orders, vehicle capacities, depot locations, and real-world route/speed restrictions to compute and display the most efficient delivery plans — cutting fuel costs and delivery times.",
+      role: "Frontend Developer — built the complete React frontend including map views, dispatch planning, vehicle configuration, and restriction management.",
+      teamSize: "3 (1 Frontend, 2 Backend/Algorithm)",
+      duration: "Dec 2023 – Present",
+      features: [
+        "Interactive Map View — HERE Maps and Leaflet integration to visualize optimized routes with waypoints",
+        "Dispatch Plan — auto-generated multi-vehicle dispatch plans with order assignments per route",
+        "Order Management — create and manage delivery orders with pickup/drop locations",
+        "Vehicle Configuration — define vehicle types, capacities, and availability windows",
+        "Transporter Configuration — manage logistics providers and their vehicle fleets",
+        "Speed Restriction Zones — define geographic zones with max speed overrides",
+        "Route Restriction Management — block or restrict specific road segments by time or vehicle type",
+        "Sub-Configuration — granular settings for solver parameters and optimization constraints",
+        "Dashboard — KPI tiles for total orders, vehicles deployed, distance saved, and route efficiency",
+        "Excel Export — generate logistics planning spreadsheets from solved route data",
+      ],
+      highlights: [
+        "Integrated HERE Maps API for real-world road network routing and geocoding",
+        "Built Python solver backend using VRP algorithms (matrix-based optimization)",
+        "Implemented geospatial restriction zones drawn directly on the map",
+        "Designed multi-role login (Admin, Customer, Driver) with separate flows",
+        "Dockerized full stack with NGINX reverse proxy and Prometheus/Jaeger monitoring",
+      ],
+    }
   }
 ];
+
 
 export const EDUCATION: Education[] = [
   {

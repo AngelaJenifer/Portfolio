@@ -8,13 +8,24 @@ export interface Experience {
   type: 'tech' | 'support';
 }
 
+export interface ProjectDetail {
+  overview: string;
+  role: string;
+  features: string[];
+  highlights: string[];
+  teamSize?: string;
+  duration?: string;
+}
+
 export interface Project {
   id: number;
   title: string;
   techStack: string[];
   description: string;
   image?: string;
+  details?: ProjectDetail;
 }
+
 
 export interface Education {
   degree: string;
