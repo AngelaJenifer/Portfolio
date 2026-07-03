@@ -6,6 +6,8 @@ export const PERSONAL_DETAILS = {
   email: "angelajenifer13@gmail.com",
   phone: "8608527213",
   address: "Ap-181, 10th Street, K.K.Nagar, Chennai 600078",
+  linkedin: "https://www.linkedin.com/in/angela-jenifer-mary-b588a913b/",
+  github: "https://github.com/AngelaJenifer",
   
   // TO USE YOUR OWN PHOTO:
   // Option 1: Place your photo (e.g. 'me.jpg') in the 'public' folder and set this to: "/me.jpg"
@@ -13,8 +15,15 @@ export const PERSONAL_DETAILS = {
   profileImageLight: "/whitebgphoto.png",
   profileImageDark: "/photo.png",
   about: "To obtain a challenging position as a Frontend Developer, where I can leverage my technical expertise in React.js and modern UI frameworks to deliver scalable, user-friendly applications, contribute to innovative products, and grow professionally in a dynamic environment.",
-  tagline: "Building scalable, user-centric web experiences with React & Modern UI."
+  tagline: "Building scalable, user-centric web experiences with React & Modern UI.",
+  roleVariants: ["Frontend Developer", "React Specialist", "SaaS Builder"],
+  stats: [
+    { label: "Years Experience", value: "2+" },
+    { label: "Projects Delivered", value: "3+" },
+    { label: "Star Awards", value: "10+" },
+  ]
 };
+
 
 export const EXPERIENCES: Experience[] = [
   {

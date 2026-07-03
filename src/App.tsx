@@ -24,7 +24,9 @@ import {
   Star,
   Users,
   Clock,
-  Layers
+  Layers,
+  Linkedin,
+  ArrowDown
 } from 'lucide-react';
 
 // Animation Variants
@@ -75,9 +77,39 @@ const slideInRight: Variants = {
   }
 };
 
+// Typing Effect Hook
+function useTypingEffect(words: string[], typingSpeed = 80, deletingSpeed = 50, pauseMs = 1800) {
+  const [displayed, setDisplayed] = useState('');
+  const [wordIdx, setWordIdx] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const current = words[wordIdx % words.length];
+    let timeout: ReturnType<typeof setTimeout>;
+    if (!isDeleting) {
+      if (displayed.length < current.length) {
+        timeout = setTimeout(() => setDisplayed(current.slice(0, displayed.length + 1)), typingSpeed);
+      } else {
+        timeout = setTimeout(() => setIsDeleting(true), pauseMs);
+      }
+    } else {
+      if (displayed.length > 0) {
+        timeout = setTimeout(() => setDisplayed(displayed.slice(0, -1)), deletingSpeed);
+      } else {
+        setIsDeleting(false);
+        setWordIdx(i => i + 1);
+      }
+    }
+    return () => clearTimeout(timeout);
+  }, [displayed, isDeleting, wordIdx, words, typingSpeed, deletingSpeed, pauseMs]);
+
+  return displayed;
+}
+
 const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const typedRole = useTypingEffect(PERSONAL_DETAILS.roleVariants);
   const [activeSection, setActiveSection] = useState('home');
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -221,7 +253,7 @@ const isDark = theme === "dark";
                 <button
                   key={item}
                   onClick={() => scrollToSection(item.toLowerCase())}
-                  className={`text-sm font-medium transition-colors duration-200 hover:text-primary-600 dark:hover:text-primary-400 relative ${
+                  className={`cursor-pointer text-sm font-medium transition-colors duration-200 hover:text-primary-600 dark:hover:text-primary-400 relative ${
                     activeSection === item.toLowerCase() 
                       ? 'text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400 font-bold' 
                       : 'text-slate-600 dark:text-slate-400'
@@ -288,98 +320,205 @@ const isDark = theme === "dark";
         )}
       </motion.nav>
 
-      {/* Hero Section */}
-      <section id="home" className="pt-32 pb-20 md:pt-40 md:pb-28 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-12">
-          <motion.div 
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer}
-            className="flex-1 text-center md:text-left space-y-6"
-          >
-            <motion.div variants={fadeInUp} className="inline-block px-4 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-primary-600 dark:text-primary-300 font-medium rounded-full text-sm mb-4 shadow-sm dark:shadow-[0_0_15px_rgba(139,92,246,0.15)]">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400">
-                Frontend Developer
-              </span>
-            </motion.div>
-            <motion.h1 variants={fadeInUp} className="text-5xl md:text-7xl font-serif font-bold text-slate-900 dark:text-white leading-tight">
-              Hi, I'm <br/>
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-600 via-secondary-600 to-primary-600 dark:from-primary-400 dark:via-secondary-400 dark:to-primary-400 animate-gradient-x bg-[length:200%_auto]">
-                {PERSONAL_DETAILS.name}
-              </span>
-            </motion.h1>
-            <motion.p variants={fadeInUp} className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
-              {PERSONAL_DETAILS.tagline}
-            </motion.p>
-            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => scrollToSection('contact')}
-                className="px-8 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-medium rounded-full hover:from-primary-500 hover:to-secondary-500 transition-all shadow-lg hover:shadow-primary-900/40 flex items-center justify-center gap-2"
-              >
-                Contact Me <Send size={18} />
-              </motion.button>
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => scrollToSection('projects')}
-                className="px-8 py-3 bg-white dark:bg-slate-900/50 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 font-medium rounded-full hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-secondary-500/50 hover:text-primary-600 dark:hover:text-white transition-all flex items-center justify-center gap-2 hover:shadow-lg dark:hover:shadow-[0_0_15px_rgba(192,38,211,0.2)]"
-              >
-                View Work <ChevronRight size={18} />
-              </motion.button>
-            </motion.div>
-            
-            <motion.div variants={fadeInUp} className="pt-8 flex items-center justify-center md:justify-start gap-8 text-slate-500 dark:text-slate-500">
-              <div className="flex items-center gap-2 group hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                <MapPin size={18} className="group-hover:text-secondary-600 dark:group-hover:text-secondary-400" />
-                <span className="text-sm">Chennai, India</span>
-              </div>
-              <div className="flex items-center gap-2 group hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                <Briefcase size={18} className="group-hover:text-secondary-600 dark:group-hover:text-secondary-400" />
-                <span className="text-sm">2+ Years Tech Exp</span>
-              </div>
-            </motion.div>
-          </motion.div>
-          
-          {/* Animated Profile Image */}
-          <div className="flex-1 relative w-full max-w-md md:max-w-lg mt-10 md:mt-0 flex justify-center">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
-              className="relative w-80 h-80 md:w-[400px] md:h-[400px]"
-            >
-              {/* Background Blob Animation */}
-              <div className="absolute top-0 -left-4 w-72 h-72 bg-primary-600/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob"></div>
-              <div className="absolute bottom-0 -right-4 w-72 h-72 bg-secondary-600/30 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-              
-              {/* Glowing Pulse behind image */}
-              <div className="absolute inset-4 bg-gradient-to-tr from-primary-500 to-secondary-500 rounded-full opacity-20 dark:opacity-30 blur-xl animate-pulse"></div>
+      {/* ── Hero Section ── */}
+      <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
 
-              {/* Main Image Container */}
-              <motion.div
-                animate={{ y: [0, -15, 0] }}
-                transition={{ 
-                  duration: 6, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
-                }}
-                className="relative w-full h-full z-10"
-              >
-                <motion.div 
-                  whileHover={{ scale: 1.05 }}
-                  className="w-full h-full overflow-hidden"
+        {/* Dot-grid animated background */}
+        <div
+          className="absolute inset-0 opacity-[0.035] dark:opacity-[0.06] pointer-events-none"
+          style={{
+            backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
+            backgroundSize: '28px 28px',
+          }}
+        />
+
+        {/* Ambient gradient blobs */}
+        <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-primary-600/20 dark:bg-primary-500/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-1/4 -right-32 w-[500px] h-[500px] bg-secondary-600/20 dark:bg-secondary-500/15 rounded-full blur-[120px] pointer-events-none" />
+
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20 w-full">
+          <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-20">
+
+            {/* ── Left: Text Content ── */}
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={staggerContainer}
+              className="flex-1 text-center lg:text-left space-y-7 order-2 lg:order-1"
+            >
+              {/* Availability badge */}
+              <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700/50 text-green-700 dark:text-green-400 text-xs font-semibold tracking-wide shadow-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                Available for Opportunities
+              </motion.div>
+
+              {/* Name */}
+              <motion.h1 variants={fadeInUp} className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-slate-900 dark:text-white leading-tight tracking-tight">
+                Hi, I'm{' '}
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-600 via-secondary-500 to-primary-500 dark:from-primary-400 dark:via-secondary-400 dark:to-primary-400 animate-gradient-x bg-[length:200%_auto]">
+                  Angela Jenifer
+                </span>
+              </motion.h1>
+
+              {/* Typing role */}
+              <motion.div variants={fadeInUp} className="flex items-center gap-2 justify-center lg:justify-start">
+                <span className="text-lg sm:text-xl md:text-2xl font-mono font-medium text-slate-600 dark:text-slate-300">
+                  {typedRole}
+                  <span className="inline-block w-0.5 h-6 bg-primary-500 ml-0.5 align-middle animate-pulse" />
+                </span>
+              </motion.div>
+
+              {/* Tagline */}
+              <motion.p variants={fadeInUp} className="text-base md:text-lg text-slate-500 dark:text-slate-400 max-w-xl leading-relaxed">
+                {PERSONAL_DETAILS.tagline}
+              </motion.p>
+
+              {/* Stat counters */}
+              <motion.div variants={fadeInUp} className="flex justify-center lg:justify-start gap-6 pt-1">
+                {PERSONAL_DETAILS.stats.map((stat) => (
+                  <div key={stat.label} className="text-center lg:text-left">
+                    <p className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-secondary-600 dark:from-primary-400 dark:to-secondary-400">{stat.value}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-500 mt-0.5 leading-tight">{stat.label}</p>
+                  </div>
+                ))}
+              </motion.div>
+
+              {/* CTA Buttons */}
+              <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.96 }}
+                  onClick={() => scrollToSection('contact')}
+                  className="px-7 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-semibold rounded-full shadow-lg shadow-primary-900/30 hover:shadow-primary-900/50 hover:from-primary-500 hover:to-secondary-500 transition-all flex items-center justify-center gap-2 text-sm"
                 >
-                  <img 
-                    src={isDark ? PERSONAL_DETAILS.profileImageDark : PERSONAL_DETAILS.profileImageLight}                    
-                    alt={PERSONAL_DETAILS.name} 
-                    className="w-full h-full object-contain"
-                  />
-                </motion.div>
+                  <Mail size={16} /> Get In Touch
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.96 }}
+                  onClick={() => scrollToSection('projects')}
+                  className="px-7 py-3 bg-white/80 dark:bg-slate-900/60 backdrop-blur border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold rounded-full hover:border-primary-500/50 hover:text-primary-600 dark:hover:text-white hover:shadow-lg transition-all flex items-center justify-center gap-2 text-sm"
+                >
+                  <Code2 size={16} /> View Projects
+                </motion.button>
+              </motion.div>
+
+              {/* Social Links + Location */}
+              <motion.div variants={fadeInUp} className="flex items-center gap-4 justify-center lg:justify-start pt-2 flex-wrap">
+                <a
+                  href={PERSONAL_DETAILS.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors group"
+                >
+                  <span className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/30 border border-slate-200 dark:border-slate-700 group-hover:border-primary-400/50 transition-all">
+                    <Linkedin size={15} />
+                  </span>
+                  LinkedIn
+                </a>
+
+                <a
+                  href={`mailto:${PERSONAL_DETAILS.email}`}
+                  className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 hover:text-secondary-600 dark:hover:text-secondary-400 transition-colors group"
+                >
+                  <span className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 group-hover:bg-secondary-50 dark:group-hover:bg-secondary-900/30 border border-slate-200 dark:border-slate-700 group-hover:border-secondary-400/50 transition-all">
+                    <Mail size={15} />
+                  </span>
+                  Email
+                </a>
+                <span className="hidden sm:flex items-center gap-1.5 text-sm text-slate-400 dark:text-slate-500">
+                  <MapPin size={14} /> Chennai, India
+                </span>
               </motion.div>
             </motion.div>
+
+            {/* ── Right: Profile Photo ── */}
+            <div className="flex-shrink-0 order-1 lg:order-2 flex justify-center">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.7 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.9, ease: 'easeOut' }}
+                className="relative"
+              >
+                {/* Outer spinning gradient ring */}
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
+                  className="absolute -inset-2 rounded-full bg-gradient-to-tr from-primary-500 via-secondary-500 to-primary-400 opacity-70 blur-sm"
+                />
+
+                {/* Static ring frame */}
+                <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-primary-500 to-secondary-600 opacity-80" />
+
+                {/* Glowing backdrop */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary-600/40 to-secondary-600/40 blur-2xl scale-110 pointer-events-none" />
+
+                {/* Floating animation wrapper */}
+                <motion.div
+                  animate={{ y: [0, -12, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+                  className="relative z-10 w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white dark:border-slate-900 shadow-2xl"
+                >
+                  <img
+                    src={isDark ? PERSONAL_DETAILS.profileImageDark : PERSONAL_DETAILS.profileImageLight}
+                    alt={PERSONAL_DETAILS.name}
+                    className="w-full h-full object-cover object-top"
+                  />
+                </motion.div>
+
+                {/* Decorative floating badge — Experience */}
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.8, duration: 0.5 }}
+                  className="absolute -right-6 top-8 z-20 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl px-3 py-2 shadow-xl flex items-center gap-2"
+                >
+                  <Briefcase size={14} className="text-primary-600 dark:text-primary-400" />
+                  <div>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Experience</p>
+                    <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">2+ Years</p>
+                  </div>
+                </motion.div>
+
+                {/* Decorative floating badge — React */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.0, duration: 0.5 }}
+                  className="absolute -left-8 bottom-10 z-20 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl px-3 py-2 shadow-xl flex items-center gap-2"
+                >
+                  <Code2 size={14} className="text-secondary-600 dark:text-secondary-400" />
+                  <div>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Speciality</p>
+                    <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">React.js</p>
+                  </div>
+                </motion.div>
+              </motion.div>
+            </div>
+
           </div>
+
+          {/* ── Scroll Down Indicator ── */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.4, duration: 0.6 }}
+            className="flex justify-center mt-16"
+          >
+            <button
+              onClick={() => scrollToSection('about')}
+              className="flex flex-col items-center gap-1.5 text-slate-400 dark:text-slate-600 hover:text-primary-500 dark:hover:text-primary-400 transition-colors group"
+              aria-label="Scroll to About"
+            >
+              <span className="text-xs font-medium tracking-widest uppercase">Scroll</span>
+              <motion.div
+                animate={{ y: [0, 6, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <ArrowDown size={18} className="group-hover:text-primary-500 transition-colors" />
+              </motion.div>
+            </button>
+          </motion.div>
         </div>
       </section>
 
@@ -555,16 +694,7 @@ const isDark = theme === "dark";
                 A selection of key projects where I contributed to architectural decisions and frontend development.
               </p>
             </motion.div>
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="hidden md:block"
-            >
-              <button className="text-secondary-600 dark:text-secondary-400 font-medium flex items-center hover:text-secondary-500 dark:hover:text-secondary-300 transition-colors">
-                View GitHub <ExternalLink size={16} className="ml-1" />
-              </button>
-            </motion.div>
+
           </div>
 
           <motion.div 
@@ -641,8 +771,8 @@ const isDark = theme === "dark";
           >
             {[
               { icon: Award, title: "Star Performer", desc: "Awarded 10+ times for excellence in customer service and delivery.", color: "text-yellow-500 dark:text-yellow-400" },
-              { icon: Code2, title: "Modern Stack", desc: "Specialized in React ecosystem including Context API and Styled Components.", color: "text-primary-600 dark:text-primary-400" },
-              { icon: Briefcase, title: "Domain Knowledge", desc: "Experience in Logistics, Fleet Management, and SaaS platforms.", color: "text-secondary-600 dark:text-secondary-400" }
+              { icon: Code2, title: "Tech Stack", desc: "React, TypeScript, Redux, MUI, Tailwind CSS, Vite, PWA, REST APIs, Chart.js & Styled Components.", color: "text-primary-600 dark:text-primary-400" },
+              { icon: Briefcase, title: "Domain Knowledge", desc: "Experience in Dock & Warehouse Logistics, Sports-Tech SaaS, and Last-Mile Route Optimization platforms.", color: "text-secondary-600 dark:text-secondary-400" }
             ].map((item, idx) => (
               <motion.div 
                 key={idx}
